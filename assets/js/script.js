@@ -1,5 +1,6 @@
 var formEl = document.querySelector("#task-form");
 var taskToDoEl = document.querySelector("#tasks-to-do");
+var taskIdCounter = 0;
 
 var taskFormHandler = function (event) {
   event.preventDefault();
@@ -27,6 +28,9 @@ var createTaskEl = function (taskDataObj) {
   var listItemEl = document.createElement("li");
   listItemEl.className = "task-item";
 
+  //add task id as a custom attribute
+  listItemEl.setAttribute("data-task-id", taskIdCounter);
+
   //create div to hold task info and add to list item
   var taskInfoEl = document.createElement("div");
   taskInfoEl.className = "task-info";
@@ -40,13 +44,75 @@ var createTaskEl = function (taskDataObj) {
     "</span>";
   listItemEl.appendChild(taskInfoEl);
 
+  var taskActionsEl = createTaskActions(taskIdCounter);
+  listItemEl.appendChild(taskActionsEl);
+
+  taskToDoEl.appendChild(listItemEl);
+
   //add entire list item to list
   taskToDoEl.appendChild(listItemEl);
+
+  //increase task counter for next unique id
+  taskIdCounter++;
+};
+
+var createTaskActions = function (taskId) {
+  var actionContainerEl = document.createElement("div");
+  actionContainerEl.className = "task-actions";
+
+  //create new button element
+  var editButtonEl = document.createElement("button");
+  editButtonEl.textContent = "Edit";
+  editButtonEl.className = "btn edit-btn";
+  editButtonEl.setAttribute("data-task-id", taskId);
+
+  actionContainerEl.appendChild(editButtonEl);
+
+  //create delete button
+  var deleteButtonEl = document.createElement("button");
+  deleteButtonEl.textContent = "Delete";
+  deleteButtonEl.className = "btn delete-btn";
+  deleteButtonEl.setAttribute("data-task-id", taskId);
+
+  actionContainerEl.appendChild(deleteButtonEl);
+
+  var statusSelectEl = document.createElement("select");
+  statusSelectEl.className = "select-status";
+  statusSelectEl.setAttribute("name", "status-change");
+  statusSelectEl.setAttribute("data-task-id", taskId);
+
+  actionContainerEl.appendChild(statusSelectEl);
+
+  var statusChoices = ["To Do", "In Progress", "Completed"];
+
+  for (var i = 0; i < statusChoices.length; i++) {
+    // create option element
+    var statusOptionEl = document.createElement("option");
+    statusOptionEl.setAttribute("value", statusChoices[i]);
+    statusOptionEl.textContent = statusChoices[i];
+
+    // append to select
+    statusSelectEl.appendChild(statusOptionEl);
+  }
+  return actionContainerEl;
 };
 
 formEl.addEventListener("submit", taskFormHandler);
 
-//rename handler function to be more specific to event that it's handling
-//new function takes task's name and title and creates HTML
-//move code into the new function
-//update handler function to send the task name and type values from the form to the new function
+// Create a new feature branch. We'll create a feature branch that corresponds to the GitHub issue we're addressing in this lesson.
+
+// Add two new lists in the HTML. We'll add a Tasks In Progress and a Tasks Completed list to Taskmaster.
+
+// Apply a unique id to each task. We'll create an id that uniquely identifies each task that's created.
+
+// Dynamically create task buttons for each task. Once we have an id for each task, we can start adding buttons and dropdowns that reference the id. Because a task and its id are dynamically created, these buttons and dropdowns will also be dynamic.
+
+// Add the ability to delete a task. We'll use event listeners to allow the user to delete tasks.
+
+// Load the task into the form to be edited. Users might want to edit existing tasks. We'll enable this by making sure the right task data loads in the editing form.
+
+// Save the edited task. Users will want to save their edits to a task; we'll make sure they can do that.
+
+// Move the task based on status. If the user changes the status of a task, we'll make sure it is moved to the appropriate list.
+
+// Save your progress with Git. You did it! It's time to merge your feature branch into the develop branch and commit your changes to GitHub.
